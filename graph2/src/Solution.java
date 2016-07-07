@@ -197,8 +197,83 @@ public class Solution {
     }
 
     public boolean stringPermutation(String A, String B) {
-
+        if(A.length()!=B.length()) return false;
+        int[] count=new int[256];
+        for(int i=0;i<A.length();i++){
+            count[A.charAt(i)]++;
+        }
+        for(int i=0;i<B.length();i++){
+            if(count[B.charAt(i)]==0) return false;
+            else{
+                count[B.charAt(i)]--;
+            }
+        }
+        return true;
     }
+
+    public List<String> stringPermutation2(String str) {
+        List<String> result=new ArrayList<>();
+        ArrayList<Character> path=new ArrayList<>();
+        boolean[] visited=new boolean[str.length()];
+        char[] array=str.toCharArray();
+        Arrays.sort(array);
+        permutationHelper(result,path,visited,array);
+        return result;
+    }
+
+    private void permutationHelper(List<String> result,ArrayList<Character> path,
+                                   boolean[] visited,char[] array){
+        if(path.size()==array.length){
+            StringBuilder sb=new StringBuilder();
+            for(char c:path){
+                sb.append(c);
+            }
+            result.add(new String(sb));
+            return;
+        }
+        else{
+            for(int i=0;i<array.length;i++){
+                if(visited[i]==true||(i!=0&&array[i]==array[i-1])&&visited[i-1]==false){
+                    continue;
+                }
+                else{
+                    visited[i]=true;
+                    path.add(array[i]);
+                    permutationHelper(result,path,visited,array);
+                    path.remove(path.size()-1);
+                    visited[i]=false;
+                }
+            }
+        }
+    }
+
+    public ArrayList<ArrayList<Integer>> kSumII(int[] A, int k, int target) {
+        ArrayList<ArrayList<Integer>> result=new ArrayList<>();
+        ArrayList<Integer> path=new ArrayList<>();
+        Arrays.sort(A);
+        ksumHelper(result,path,A,0,k,target);
+        return result;
+    }
+
+    private void ksumHelper(ArrayList<ArrayList<Integer>> result,ArrayList<Integer> path,
+                            int[] array,int index,int left,int gap){
+        if(left==0&&gap==0){
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        if((left==0&&gap!=0)||index>=array.length||array[index]>gap){
+            return;
+        }
+        for(int i=index;i<array.length;i++){
+            if(array[i]<=gap){
+                path.add(array[i]);
+                ksumHelper(result,path,array,i+1,left-1,gap-array[i]);
+                path.remove(path.size()-1);
+            }
+        }
+    }
+
+
 
 
 }
