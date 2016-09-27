@@ -152,5 +152,43 @@ public class Solution {
         return sum;
     }
 
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+
+    }
+
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        if(k==0||s==null||s.length()==0) return 0;
+        int count=0;
+        int[] array=new int[256];
+        int left=0;
+        int right=0;
+        int result=Integer.MIN_VALUE;
+        while(right<s.length()){
+            char c=s.charAt(right);
+            if(array[c]==0){
+                count++;
+                array[c]++;
+            }else{
+                array[c]++;
+            }
+            if(count>k){
+                int length=right-left;
+                result=Math.max(result,length);
+                while(count>k){
+                    char tmp=s.charAt(left);
+                    if(--array[tmp]==0){
+                        count--;
+                    }
+                    left++;
+                }
+            }
+            right++;
+        }
+        result=Math.max(result,right-left);
+        return result;
+    }
+
+
+
 
 }
