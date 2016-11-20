@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.PriorityQueue;
 
 /**
@@ -62,5 +64,64 @@ public class Solution {
             }
         }
         return water;
+    }
+
+
+    public int[] medianII(int[] nums) {
+        PriorityQueue<Integer> maxHeap=new PriorityQueue<>(1, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2-o1;
+            }
+        });
+        int[] result=new int[nums.length];
+        int count=0;
+        PriorityQueue<Integer> minHeap=new PriorityQueue<>();
+        for(int num:nums){
+            minHeap.offer(num);
+            if(minHeap.size()>maxHeap.size()){
+                maxHeap.offer(minHeap.poll());
+            }
+            else{
+                maxHeap.offer(minHeap.poll());
+                minHeap.offer(maxHeap.poll());
+            }
+            result[count++]=maxHeap.peek();
+        }
+        return result;
+    }
+
+    public ArrayList<Integer> medianSlidingWindow(int[] nums, int k) {
+        PriorityQueue<Integer> maxHeap=new PriorityQueue<>(1, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2-o1;
+            }
+        });
+        ArrayList<Integer> result=new ArrayList<>();
+        PriorityQueue<Integer> minHeap=new PriorityQueue<>();
+        for(int i=0;i<nums.length;i++){
+            int deleteIndex=i-k;
+            minHeap.offer(nums[i]);
+            if(deleteIndex>=0){
+                if(minHeap.contains(nums[deleteIndex])){
+                    minHeap.remove(nums[deleteIndex]);
+                }else{
+                    maxHeap.remove(nums[deleteIndex]);
+                }
+            }
+            while(minHeap.size()>maxHeap.size()){
+                maxHeap.offer(minHeap.poll());
+            }
+            if(minHeap.size()==maxHeap.size()){
+                maxHeap.offer(minHeap.poll());
+                minHeap.offer(maxHeap.poll());
+            }
+            if(deleteIndex>=-1){
+                result.add(maxHeap.peek());
+            }
+        }
+        return result;
+
     }
 }

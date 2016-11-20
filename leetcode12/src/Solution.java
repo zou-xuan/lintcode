@@ -109,4 +109,28 @@ public class Solution {
         }
         return maxLength;
     }
+
+    int maxLength=0;
+    String result=null;
+
+    public String longestPalindrome(String s) {
+        if(s.length()<2) return s;
+        for(int i=0;i<s.length();i++){
+            extendPalin(s,i,i);
+            extendPalin(s,i,i+1);
+        }
+        return result;
+    }
+
+    private void extendPalin(String s,int left,int right){
+        while (left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right)){
+            left--;
+            right++;
+        }
+        int length=right-left-1;
+        if(length>maxLength){
+            maxLength=length;
+            result=s.substring(left+1,right-1);
+        }
+    }
 }
