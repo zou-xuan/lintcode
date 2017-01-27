@@ -11,15 +11,18 @@ public class Solution {
         for(String s:words){
             dict.add(s);
         }
-        ArrayList<String> list=new ArrayList<>();
+        HashSet<String> set=new HashSet<>();
         for(String word:words){
             if(canBreak(word,dict)){
-                list.add(word);
+                set.add(word);
             }
         }
-        String[] result=new String[list.size()];
-        for(int i=0;i<list.size();i++){
-            result[i]=list.get(i);
+        String[] result=new String[dict.size()-set.size()];
+        int count=0;
+        for(String s:words){
+            if(!set.contains(s)){
+                result[count++]=s;
+            }
         }
         return result;
     }
@@ -38,15 +41,5 @@ public class Solution {
         }
         dict.add(word);
         return canBreak[word.length()];
-    }
-
-    static int getMaxLength(HashSet<String> dict){
-        int maxLength=Integer.MIN_VALUE;
-        for(String s: dict){
-            if(s.length()>maxLength){
-                maxLength=s.length();
-            }
-        }
-        return maxLength;
     }
 }
